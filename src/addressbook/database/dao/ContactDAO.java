@@ -6,8 +6,6 @@
 package addressbook.database.dao;
 
 import addressbook.subject.contact.Contact;
-import addressbook.database.WrapperConnector;
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,7 +26,8 @@ public class ContactDAO extends AbstractDAO<Contact> {
     private String filterNameFull;
 
     public ContactDAO() {
-        this.connector = new WrapperConnector();
+//        super();
+//        this.connector = new WrapperConnector();
     }
 
     public ContactDAO(Connection connection) {

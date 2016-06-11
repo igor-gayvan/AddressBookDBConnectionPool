@@ -37,7 +37,7 @@ public class AddressBook {
         Contact contact = new Contact();
         ShowData showData = new ShowData();
 
-        ContactDAO contactDAO = new ContactDAO(conn);
+        ContactDAO contactDAO = new ContactDAO();
         contactList = contactDAO.selectAll();
 
         console.addActionListener(

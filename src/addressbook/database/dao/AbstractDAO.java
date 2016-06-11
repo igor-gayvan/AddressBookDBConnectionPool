@@ -67,11 +67,24 @@ public abstract class AbstractDAO<T extends EntityAddressBook> {
 
     public void closeConnection() {
         if (ps != null) {
-            closeStatement(ps);
+            //            closeStatement((Statement)ps);
+
+            try {
+
+                ps.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(AbstractDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         if (cs != null) {
-            closeStatement(cs);
+            //            closeStatement((Statement) cs);
+            try {
+
+                cs.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(AbstractDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         if (resultSet != null) {
