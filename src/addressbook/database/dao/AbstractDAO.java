@@ -5,12 +5,18 @@
  */
 package addressbook.database.dao;
 
+import addressbook.database.ConnectionPool;
 import addressbook.subject.EntityAddressBook;
 import addressbook.database.WrapperConnector;
+import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -20,9 +26,15 @@ public abstract class AbstractDAO<T extends EntityAddressBook> {
 
     protected Connection connection;
 
-    protected WrapperConnector connector;
+    protected PreparedStatement ps;
+    protected CallableStatement cs;
+    protected ResultSet resultSet;
 
     public AbstractDAO() {
+    }
+
+    public AbstractDAO(Connection connection) {
+        this.connection = connection;
     }
 
     // методы добавления, поиска, замены, удаления
@@ -38,23 +50,41 @@ public abstract class AbstractDAO<T extends EntityAddressBook> {
 
     public abstract boolean update(T entity);
 
-    public void close(Statement st) {
-        try {
-            if (st != null) {
-                st.close();
+    public void getConnection() {
+        connection = ConnectionPool.getInstance().getConnection();
+    }
+
+    public void closeConnection() {
+        if (ps != null) {
+            //            closeStatement((Statement)ps);
+
+            try {
+
+                ps.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(AbstractDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (SQLException e) {
-            // лог о невозможности закрытия Statement
         }
-    }
 
-    // методы закрытия коннекта и Statement
-    public void close() {
-        connector.closeConnection();
-    }
+        if (cs != null) {
+            //            closeStatement((Statement) cs);
+            try {
 
-    protected void closeStatement(Statement statement) {
-        connector.closeStatement(statement);
+                cs.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(AbstractDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        if (resultSet != null) {
+            try {
+                resultSet.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(AbstractDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        ConnectionPool.getInstance().returnConnection(connection);
     }
 
 }
