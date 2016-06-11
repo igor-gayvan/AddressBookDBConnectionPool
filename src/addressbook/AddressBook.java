@@ -12,14 +12,11 @@ import addressbook.listeners.SortActionListener;
 import addressbook.listeners.ActionListener;
 import addressbook.listeners.ShowDataListener;
 import addressbook.database.dao.ContactDAO;
+import addressbook.database.dao.ContactDAO1;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -28,6 +25,7 @@ import java.util.logging.Logger;
 public class AddressBook {
 
     static List<Contact> contactList = new ArrayList<Contact>();
+    static List<Contact> contactList1 = new ArrayList<Contact>();
 
     /**
      * @param args the command line arguments
@@ -38,7 +36,9 @@ public class AddressBook {
         ShowData showData = new ShowData();
 
         ContactDAO contactDAO = new ContactDAO();
+        ContactDAO1 contactDAO1 = new ContactDAO1();
         contactList = contactDAO.selectAll();
+        contactList1 = contactDAO1.selectAll();
 
         console.addActionListener(
                 new ActionListener() {
@@ -194,12 +194,6 @@ public class AddressBook {
 
         console.working();
 
-        //        contactDAO.close();
-        try {
-
-            ConnectionPool.getInstance().closeConnections();
-        } catch (SQLException ex) {
-            Logger.getLogger(AddressBook.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        ConnectionPool.getInstance().closeConnections();
     }
 }

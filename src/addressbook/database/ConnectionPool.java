@@ -31,7 +31,7 @@ public class ConnectionPool {
     private ConnectionPool() {
     }
 
-    public static ConnectionPool getInstance() throws SQLException {
+    public static ConnectionPool getInstance() {
         try {
             if (instance == null) {
                 instance = init();

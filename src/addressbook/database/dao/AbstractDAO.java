@@ -26,8 +26,6 @@ public abstract class AbstractDAO<T extends EntityAddressBook> {
 
     protected Connection connection;
 
-    protected WrapperConnector connector;
-
     protected PreparedStatement ps;
     protected CallableStatement cs;
     protected ResultSet resultSet;
@@ -53,16 +51,7 @@ public abstract class AbstractDAO<T extends EntityAddressBook> {
     public abstract boolean update(T entity);
 
     public void getConnection() {
-        try {
-            connection = ConnectionPool.getInstance().getConnection();
-        } catch (SQLException ex) {
-            Logger.getLogger(AbstractDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    // методы закрытия коннекта и Statement
-    public void close() {
-        connector.closeConnection();
+        connection = ConnectionPool.getInstance().getConnection();
     }
 
     public void closeConnection() {
@@ -95,16 +84,7 @@ public abstract class AbstractDAO<T extends EntityAddressBook> {
             }
         }
 
-        try {
-            ConnectionPool.getInstance().returnConnection(connection);
-        } catch (SQLException ex) {
-            Logger.getLogger(AbstractDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-
-    protected void closeStatement(Statement statement) {
-        connector.closeStatement(statement);
+        ConnectionPool.getInstance().returnConnection(connection);
     }
 
 }

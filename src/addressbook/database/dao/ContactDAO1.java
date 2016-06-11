@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author Haivan
  */
-public class ContactDAO extends AbstractDAO<Contact> {
+public class ContactDAO1 extends AbstractDAO<Contact> {
 
     private final static String SQL_CONTACT_SELECT_LIST = "{call sp_contact_sel(?, ?)}";
     private final static String SQL_CONTACT_INSERT = "{call sp_contact_ins(?, ?, ?, ?, ?)}";
@@ -25,10 +25,10 @@ public class ContactDAO extends AbstractDAO<Contact> {
 
     private String filterNameFull;
 
-    public ContactDAO() {
+    public ContactDAO1() {
     }
 
-    public ContactDAO(Connection connection) {
+    public ContactDAO1(Connection connection) {
         super(connection);
     }
 
