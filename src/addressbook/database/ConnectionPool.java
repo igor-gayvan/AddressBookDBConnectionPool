@@ -6,12 +6,10 @@
 package addressbook.database;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,13 +30,10 @@ public class ConnectionPool {
     }
 
     public static ConnectionPool getInstance() {
-        try {
-            if (instance == null) {
-                instance = init();
-            }
-        } finally {
-            return instance;
+        if (instance == null) {
+            instance = init();
         }
+        return instance;
     }
 
     private static ConnectionPool init() {
@@ -59,7 +54,7 @@ public class ConnectionPool {
             if (countConnections < MAX_POOL_SIZE) {
                 WrapperConnector connector = new WrapperConnector();
                 connection = connector.getConnection();
-                
+
                 countConnections++;
             } else {
                 try {
