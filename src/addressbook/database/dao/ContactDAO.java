@@ -54,7 +54,7 @@ public class ContactDAO extends AbstractDAO<Contact> {
 
         List<Contact> contactList = new ArrayList<>();
         try {
-            cs = connector.getConnection().prepareCall(SQL_CONTACT_SELECT_LIST);
+            cs = connection.prepareCall(SQL_CONTACT_SELECT_LIST);
 
             cs.setNull("pi_contact_id", java.sql.Types.INTEGER);
 
@@ -98,10 +98,11 @@ public class ContactDAO extends AbstractDAO<Contact> {
      */
     @Override
     public boolean insert(Contact contact) {
+        getConnection();
         boolean isInserted = false;
 
         try {
-            cs = connector.getConnection().prepareCall(SQL_CONTACT_INSERT);
+            cs = connection.prepareCall(SQL_CONTACT_INSERT);
 
             //IN `pi_contact_id` INTEGER(11),
             //IN `pi_name_full` VARCHAR(255),
@@ -126,7 +127,7 @@ public class ContactDAO extends AbstractDAO<Contact> {
         } catch (SQLException e) {
             System.err.println("SQL exception (request or table failed): \n" + e);
         } finally {
-            closeStatement(cs);
+            closeConnection();
         }
         return isInserted;
     }
@@ -138,10 +139,11 @@ public class ContactDAO extends AbstractDAO<Contact> {
 
     @Override
     public boolean delete(int id) {
+        getConnection();
         boolean isDeleted = false;
 
         try {
-            cs = connector.getConnection().prepareCall(SQL_CONTACT_DELETE);
+            cs = connection.prepareCall(SQL_CONTACT_DELETE);
 
             //IN `pi_contact_id` INTEGER(11),
             cs.setInt("pi_contact_id", id);
@@ -152,7 +154,7 @@ public class ContactDAO extends AbstractDAO<Contact> {
         } catch (SQLException e) {
             System.err.println("SQL exception (request or table failed): \n" + e);
         } finally {
-            closeStatement(cs);
+            closeConnection();
         }
 
         return isDeleted;
@@ -165,10 +167,11 @@ public class ContactDAO extends AbstractDAO<Contact> {
 
     @Override
     public boolean update(Contact contact) {
+        getConnection();
         boolean isUpdated = false;
 
         try {
-            cs = connector.getConnection().prepareCall(SQL_CONTACT_UPDATE);
+            cs = connection.prepareCall(SQL_CONTACT_UPDATE);
 
             //IN `pi_contact_id` INTEGER(11),
             //IN `pi_name_full` VARCHAR(255),
@@ -193,7 +196,7 @@ public class ContactDAO extends AbstractDAO<Contact> {
         } catch (SQLException e) {
             System.err.println("SQL exception (request or table failed): \n" + e);
         } finally {
-            closeStatement(cs);
+            closeConnection();
         }
 
         return isUpdated;

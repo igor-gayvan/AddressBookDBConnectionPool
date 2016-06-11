@@ -37,9 +37,6 @@ public class AddressBook {
         Contact contact = new Contact();
         ShowData showData = new ShowData();
 
-        // 1. создание-получение соединения
-        Connection conn = ConnectionPool.getConnection();
-
         ContactDAO contactDAO = new ContactDAO(conn);
         contactList = contactDAO.selectAll();
 
