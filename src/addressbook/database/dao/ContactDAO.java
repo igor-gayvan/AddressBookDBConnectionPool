@@ -8,12 +8,11 @@ package addressbook.database.dao;
 import addressbook.subject.contact.Contact;
 import addressbook.database.WrapperConnector;
 import java.sql.CallableStatement;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -32,6 +31,10 @@ public class ContactDAO extends AbstractDAO<Contact> {
         this.connector = new WrapperConnector();
     }
 
+    public ContactDAO(Connection connection) {
+        super(connection);
+    }
+
     public String getFilterNameFull() {
         return filterNameFull;
     }
@@ -47,9 +50,9 @@ public class ContactDAO extends AbstractDAO<Contact> {
      */
     @Override
     public List<Contact> selectAll() {
-        List<Contact> contactList = new ArrayList<>();
-        CallableStatement cs = null;
+        getConnection();
 
+        List<Contact> contactList = new ArrayList<>();
         try {
             cs = connector.getConnection().prepareCall(SQL_CONTACT_SELECT_LIST);
 
@@ -61,7 +64,7 @@ public class ContactDAO extends AbstractDAO<Contact> {
                 cs.setString("pi_name_full", filterNameFull);
             }
 
-            ResultSet resultSet = cs.executeQuery();
+            resultSet = cs.executeQuery();
 
             //contact_id int(11) NOT NULL AUTO_INCREMENT COMMENT 'PK',
             //name_full varchar(255) NOT NULL COMMENT 'ФИО',
@@ -82,8 +85,7 @@ public class ContactDAO extends AbstractDAO<Contact> {
         } catch (SQLException e) {
             System.err.println("SQL exception (request or table failed):\n " + e);
         } finally {
-            closeStatement(cs);
-//            close();
+            closeConnection();
         }
         return contactList;
     }
@@ -96,8 +98,6 @@ public class ContactDAO extends AbstractDAO<Contact> {
      */
     @Override
     public boolean insert(Contact contact) {
-        CallableStatement cs = null;
-
         boolean isInserted = false;
 
         try {
@@ -138,8 +138,6 @@ public class ContactDAO extends AbstractDAO<Contact> {
 
     @Override
     public boolean delete(int id) {
-        CallableStatement cs = null;
-
         boolean isDeleted = false;
 
         try {
@@ -167,8 +165,6 @@ public class ContactDAO extends AbstractDAO<Contact> {
 
     @Override
     public boolean update(Contact contact) {
-        CallableStatement cs = null;
-
         boolean isUpdated = false;
 
         try {

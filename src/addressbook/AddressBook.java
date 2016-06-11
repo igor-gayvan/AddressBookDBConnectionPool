@@ -5,6 +5,7 @@
  */
 package addressbook;
 
+import addressbook.database.ConnectionPool;
 import addressbook.subject.contact.Contact;
 import addressbook.subject.contact.ContactFields;
 import addressbook.listeners.SortActionListener;
@@ -12,9 +13,13 @@ import addressbook.listeners.ActionListener;
 import addressbook.listeners.ShowDataListener;
 import addressbook.database.dao.ContactDAO;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -32,7 +37,10 @@ public class AddressBook {
         Contact contact = new Contact();
         ShowData showData = new ShowData();
 
-        ContactDAO contactDAO = new ContactDAO();
+        // 1. создание-получение соединения
+        Connection conn = ConnectionPool.getConnection();
+
+        ContactDAO contactDAO = new ContactDAO(conn);
         contactList = contactDAO.selectAll();
 
         console.addActionListener(
@@ -189,6 +197,12 @@ public class AddressBook {
 
         console.working();
 
-        contactDAO.close();
+        //        contactDAO.close();
+        try {
+
+            ConnectionPool.getInstance().closeConnections();
+        } catch (SQLException ex) {
+            Logger.getLogger(AddressBook.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
