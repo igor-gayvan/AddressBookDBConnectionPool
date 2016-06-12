@@ -9,7 +9,7 @@ package addressbook.listeners;
  *
  * @author Igor Gayvan
  */
-public interface ActionListener {
+public interface IActionListener {
 
     public void exitAction();
 
