@@ -6,6 +6,7 @@
 package addressbook.database;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -34,24 +35,27 @@ public class WrapperConnector {
     private static String useSSL;
 
     static {
-//        ResourceBundle resource = ResourceBundle.getBundle("config.database");
-//
-//        driver = resource.getString("db.driver");
-//        url = resource.getString("db.url");
-//        user = resource.getString("db.user");
-//        pass = resource.getString("db.password");
-//        useSSL = resource.getString("db.useSSL");//
-// catch (MissingResourceException e) {
-//            System.err.println("properties file is missing " + e);
-//        }
+        try {
+            Properties props = loadProperties();
 
-        Properties props = loadProperties();
+            driver = props.getProperty("db.driver");
+            url = props.getProperty("db.url");
+            user = props.getProperty("db.user");
+            pass = props.getProperty("db.password");
+            useSSL = props.getProperty("db.useSSL");
+        } catch (FileNotFoundException ex) {
+            try {
+                ResourceBundle resource = ResourceBundle.getBundle("config.database");
 
-        driver = props.getProperty("db.driver");
-        url = props.getProperty("db.url");
-        user = props.getProperty("db.user");
-        pass = props.getProperty("db.password");
-        useSSL = props.getProperty("db.useSSL");
+                driver = resource.getString("db.driver");
+                url = resource.getString("db.url");
+                user = resource.getString("db.user");
+                pass = resource.getString("db.password");
+                useSSL = resource.getString("db.useSSL");
+            } catch (MissingResourceException e) {
+                System.err.println("properties file is missing " + e);
+            }
+        }
 
         try {
             Class.forName(driver);
@@ -60,7 +64,7 @@ public class WrapperConnector {
         }
     }
 
-    private static Properties loadProperties() {
+    private static Properties loadProperties() throws FileNotFoundException {
         Properties props = new Properties();
         try (FileInputStream fis = new FileInputStream(NAME_FILE_PROPERTIS)) {
             props.load(fis);
