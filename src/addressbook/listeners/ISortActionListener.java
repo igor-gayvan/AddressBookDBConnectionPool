@@ -9,7 +9,7 @@ package addressbook.listeners;
  *
  * @author human
  */
-public interface SortActionListener {
+public interface ISortActionListener {
 
     public void sortByPhoneAction();
 

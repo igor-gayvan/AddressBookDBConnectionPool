@@ -8,15 +8,15 @@ package addressbook;
 import addressbook.database.ConnectionPool;
 import addressbook.subject.contact.Contact;
 import addressbook.subject.contact.ContactFields;
-import addressbook.listeners.SortActionListener;
-import addressbook.listeners.ActionListener;
-import addressbook.listeners.ShowDataListener;
 import addressbook.database.dao.ContactDAO;
 import addressbook.database.dao.ContactDAO1;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import addressbook.listeners.IActionListener;
+import addressbook.listeners.IShowDataListener;
+import addressbook.listeners.ISortActionListener;
 
 /**
  *
@@ -40,8 +40,7 @@ public class AddressBook {
         contactList = contactDAO.selectAll();
         contactList1 = contactDAO1.selectAll();
 
-        console.addActionListener(
-                new ActionListener() {
+        console.addActionListener(new IActionListener() {
             // Выход
             @Override
             public void exitAction() {
@@ -121,8 +120,7 @@ public class AddressBook {
         }
         );
 
-        console.addShowDataListener(
-                new ShowDataListener() {
+        console.addShowDataListener(new IShowDataListener() {
 
             // Показываем приглашения для ввода данных контакта
             @Override
@@ -167,8 +165,7 @@ public class AddressBook {
         }
         );
 
-        console.addSortActionListener(
-                new SortActionListener() {
+        console.addSortActionListener(new ISortActionListener() {
 
             // Сортируем список контактов по телефону и показываем его
             @Override

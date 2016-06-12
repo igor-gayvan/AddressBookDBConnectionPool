@@ -9,7 +9,7 @@ package addressbook.listeners;
  *
  * @author human
  */
-public interface ShowDataListener {
+public interface IShowDataListener {
 
     public void showListContactsAction();
 
